@@ -1,16 +1,21 @@
-const http=require('http');
-// this returns us a server
-const express=require('express');
-const app=express();
-// creating a middlewear 
-app.use((req,res,next)=>{
-    console.log("here in 1st middlewear")
-    next()// for going to next middlewear
-})
-app.use((req,res,next)=>{
-    console.log("in 2nd");
-    res.send("<h1>hello from Express!</h1>");
-})
+const express = require('express');
+const bodyParser = require('body-parser');
 
-app.listen(3000)
- 
+const app = express();
+
+app.use(bodyParser.urlencoded({extended: false}));
+
+app.use('/add-product', (req, res, next) => {
+  res.send('<form action="/product" method="POST"><input type="text" name="title"><input type="number" name="size"><button type="submit">Add Product</button></form>');
+});
+
+app.post('/product', (req, res, next) => {
+    console.log(req.body);
+    res.redirect('/');
+});
+
+app.use('/', (req, res, next) => {
+  res.send('<h1>Hello from Express!</h1>');
+});
+
+app.listen(3000);
